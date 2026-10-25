@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f1ea">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="小账本">
+<meta name="format-detection" content="telephone=no">
+<title>小账本 · 收支记录</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">¥</div>
+      <div class="brand-text">
+        <h1>小账本</h1>
+        <p>只存在这台设备的浏览器里</p>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="主导航">
+      <button class="tab-btn is-active" data-tab="list" role="tab" aria-selected="true">记账</button>
+      <button class="tab-btn" data-tab="stats" role="tab" aria-selected="false">统计</button>
+      <button class="tab-btn" data-tab="settings" role="tab" aria-selected="false">设置</button>
+    </nav>
+  </header>
+
+  <main id="view" class="view" role="tabpanel"></main>
+
+  <p class="app-foot">数据不联网、不上传 · 换设备或清理浏览器前，请到「设置」导出备份</p>
+</div>
+
+<button class="fab" id="fab" data-action="new-entry" aria-label="记一笔">＋</button>
+
+<div class="sheet-backdrop" id="sheetBackdrop" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2 id="sheetTitle">记一笔</h2>
+      <button type="button" class="icon-btn" data-action="close-sheet" aria-label="关闭">✕</button>
+    </div>
+
+    <form id="entryForm" novalidate>
+      <div class="seg type-seg" id="typeSeg">
+        <button type="button" class="seg-btn is-active" data-action="set-type" data-type="expense">支出</button>
+        <button type="button" class="seg-btn" data-action="set-type" data-type="income">收入</button>
+      </div>
+
+      <label class="amount-field">
+        <span class="amount-currency" aria-hidden="true">¥</span>
+        <input id="amountInput" name="amount" type="text" inputmode="decimal" autocomplete="off"
+               placeholder="0.00" aria-label="金额">
+      </label>
+
+      <p class="form-error" id="formError" role="alert" hidden></p>
+
+      <label class="field">
+        <span class="field-label">名称</span>
+        <input id="nameInput" name="name" type="text" maxlength="40" autocomplete="off"
+               placeholder="这笔账叫什么？例如：午饭、地铁、工资">
+      </label>
+
+      <div class="field">
+        <span class="field-label">分类</span>
+        <div class="chips" id="categoryChips"></div>
+        <button type="button" class="chip chip-add" data-action="add-category" id="addCatBtn">＋ 新分类</button>
+        <div class="inline-add" id="addCatRow" hidden>
+          <input id="addCatInput" type="text" maxlength="12" placeholder="新分类名称" autocomplete="off">
+          <button type="button" class="btn small primary" data-action="save-new-category">添加</button>
+          <button type="button" class="btn small ghost" data-action="cancel-add-category">取消</button>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">日期</span>
+          <input id="dateInput" name="date" type="date">
+        </label>
+        <label class="field">
+          <span class="field-label">备注（可选）</span>
+          <input id="noteInput" name="note" type="text" maxlength="80" autocomplete="off" placeholder="比如：和同事一起">
+        </label>
+      </div>
+
+      <div class="sheet-actions">
+        <button type="button" class="btn ghost danger" id="deleteEntry" data-action="delete-entry" hidden>删除</button>
+        <button type="submit" class="btn primary" id="saveBtn">保存</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<noscript><p style="padding:24px;font-family:sans-serif">这个记账本需要开启 JavaScript 才能使用。</p></noscript>
+
+<script src="store.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
